@@ -21,11 +21,15 @@ import cn.sparrowmini.file.exception.StorageException;
 import cn.sparrowmini.file.exception.StorageFileNotFoundException;
 import cn.sparrowmini.file.service.StorageService;
 
+/**
+ * 本地磁盘链接
+ */
+
 @Component
-public class StorageMgtServiceImpl implements StorageService {
+public class StorageServiceLocalImpl implements StorageService {
 	private final Path rootLocation;
 
-	public StorageMgtServiceImpl() {
+	public StorageServiceLocalImpl() {
 		this.rootLocation = Paths.get(System.getProperty("user.dir"));
 	}
 
