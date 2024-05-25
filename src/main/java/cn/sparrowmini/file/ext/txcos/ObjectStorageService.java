@@ -1,4 +1,4 @@
-package cn.sparrowmini.file.service;
+package cn.sparrowmini.file.ext.txcos;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +10,8 @@ import com.tencent.cloud.Response;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "objectStorage")
-@RequestMapping(value = "objectStorages")
+@Tag(name = "cos")
+@RequestMapping(value = "cos/tx")
 public interface ObjectStorageService {
     @GetMapping(value = "/uploadTmpKeys", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

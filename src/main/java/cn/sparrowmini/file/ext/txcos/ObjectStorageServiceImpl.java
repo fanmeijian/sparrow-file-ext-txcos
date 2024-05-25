@@ -1,4 +1,4 @@
-package cn.sparrowmini.file.service.impl;
+package cn.sparrowmini.file.ext.txcos;
 
 import java.util.TreeMap;
 
@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.tencent.cloud.CosStsClient;
 import com.tencent.cloud.Response;
-
-import cn.sparrowmini.file.service.ObjectStorageService;
 
 @Service
 public class ObjectStorageServiceImpl implements ObjectStorageService {
