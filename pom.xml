@@ -4,22 +4,44 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cn.sparrowmini</groupId>
 	<artifactId>sparrow-file-ext-txcos</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
 	<properties>
 		<java.version>11</java.version>
 		<hibernate.version>5.6.5.Final</hibernate.version>
 		<aspectj.version>1.9.19</aspectj.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>2.7.17</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
-			<groupId>cn.sparrowmini</groupId>
-			<artifactId>sparrow-org</artifactId>
-			<version>0.1.2</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
-	
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.7.0</version>
+		</dependency>
 
 		<!-- 腾讯存储桶-->
 		<dependency>
@@ -31,6 +53,11 @@
 			<groupId>com.qcloud</groupId>
 			<artifactId>cos_api</artifactId>
 			<version>5.6.100</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 	<build>

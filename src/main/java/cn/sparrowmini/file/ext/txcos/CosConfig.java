@@ -11,7 +11,7 @@ import lombok.Data;
 public class CosConfig {
 
 	private String secretId;
-	private String SecretKey;
+	private String secretKey;
 	private String region;
 	private String bucket;
 	private String allowPrefixes;
