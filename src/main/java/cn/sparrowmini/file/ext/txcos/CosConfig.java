@@ -1,0 +1,18 @@
+package cn.sparrowmini.file.ext.txcos;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+import lombok.Data;
+
+@Data
+@Configuration
+@ConfigurationProperties(prefix = "sparrow.cos.tx")
+public class CosConfig {
+
+	private String secretId;
+	private String SecretKey;
+	private String region;
+	private String bucket;
+	private String allowPrefixes;
+}
