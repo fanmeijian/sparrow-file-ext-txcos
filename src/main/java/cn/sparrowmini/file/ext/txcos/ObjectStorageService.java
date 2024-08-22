@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface ObjectStorageService {
 	@GetMapping(value = "/uploadTmpKeys", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Response getUploadTmpKey(@RequestParam String fileName,@Nullable @RequestParam String path);
+	public Response getUploadTmpKey(@Nullable @RequestParam String fileName,@Nullable @RequestParam String path);
 
 	@GetMapping(value = "/downloadTmpKeys", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody

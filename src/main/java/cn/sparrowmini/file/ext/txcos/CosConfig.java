@@ -14,5 +14,5 @@ public class CosConfig {
 	private String secretKey;
 	private String region;
 	private String bucket;
-	private String allowPrefixes;
+	private String[] allowPrefixes;
 }
