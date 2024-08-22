@@ -101,7 +101,7 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
 			// 2、允许访问指定的对象："a/a1.txt", "b/b1.txt"
 			// 3、允许访问指定前缀的对象："a*", "a/*", "b/*"
 			// 如果填写了“*”，将允许用户访问所有资源；除非业务需要，否则请按照最小权限原则授予用户相应的访问权限范围。
-			config.put("allowPrefixes", new String[] { "upload/*", path });// upload/*"
+			config.put("allowPrefixes", new String[] { "upload/*", path==null?"*":path });// upload/*"
 
 			// 密钥的权限列表。必须在这里指定本次临时密钥所需要的权限。
 			// 简单上传、表单上传和分块上传需要以下的权限，其他权限列表请看

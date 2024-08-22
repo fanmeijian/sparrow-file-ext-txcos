@@ -1,6 +1,7 @@
 package cn.sparrowmini.file.ext.txcos;
 
 import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface ObjectStorageService {
 	@GetMapping(value = "/uploadTmpKeys", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Response getUploadTmpKey(@RequestParam String fileName, @RequestParam String path);
+	public Response getUploadTmpKey(@RequestParam String fileName,@Nullable @RequestParam String path);
 
 	@GetMapping(value = "/downloadTmpKeys", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
