@@ -1,4 +1,4 @@
-package cn.sparrowmini.file.ext.txcos;
+package cn.sparrowmini.ext.oss.txcos;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

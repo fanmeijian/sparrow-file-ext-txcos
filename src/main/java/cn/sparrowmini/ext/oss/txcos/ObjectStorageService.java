@@ -1,5 +1,6 @@
-package cn.sparrowmini.file.ext.txcos;
+package cn.sparrowmini.ext.oss.txcos;
 
+import cn.sparrowmini.file.model.BaseCosFile;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,4 +43,5 @@ public interface ObjectStorageService {
 	@ResponseBody
 	public byte[] download(@PathVariable String fileId);
 
+	public byte[] download(BaseCosFile cosFile);
 }

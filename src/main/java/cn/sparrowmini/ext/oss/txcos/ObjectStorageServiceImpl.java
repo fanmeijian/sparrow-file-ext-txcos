@@ -1,36 +1,29 @@
-package cn.sparrowmini.file.ext.txcos;
+package cn.sparrowmini.ext.oss.txcos;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.TreeMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
+import cn.sparrowmini.file.model.BaseCosFile;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.exception.CosClientException;
-import com.qcloud.cos.exception.CosServiceException;
 import com.qcloud.cos.http.HttpProtocol;
-import com.qcloud.cos.model.COSObject;
-import com.qcloud.cos.model.GetObjectRequest;
-import com.qcloud.cos.model.ObjectMetadata;
-import com.qcloud.cos.model.PutObjectRequest;
-import com.qcloud.cos.model.PutObjectResult;
-import com.qcloud.cos.model.StorageClass;
+import com.qcloud.cos.model.*;
 import com.qcloud.cos.region.Region;
 import com.qcloud.cos.utils.IOUtils;
 import com.tencent.cloud.CosStsClient;
 import com.tencent.cloud.Response;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.TreeMap;
 
 @Service
 public class ObjectStorageServiceImpl implements ObjectStorageService {
@@ -96,7 +89,7 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
             // 2、允许访问指定的对象："a/a1.txt", "b/b1.txt"
             // 3、允许访问指定前缀的对象："a*", "a/*", "b/*"
             // 如果填写了“*”，将允许用户访问所有资源；除非业务需要，否则请按照最小权限原则授予用户相应的访问权限范围。
-            config.put("allowPrefixes",  this.config.getAllowPrefixes());// upload/*"
+            config.put("allowPrefixes", this.config.getAllowPrefixes());// upload/*"
 
             // 密钥的权限列表。必须在这里指定本次临时密钥所需要的权限。
             // 简单上传、表单上传和分块上传需要以下的权限，其他权限列表请看
@@ -157,14 +150,12 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
 
             cosFile.setHash(putObjectResult.getContentMd5());
             String url = httpServletRequest.getRequestURL().toString().replace(httpServletRequest.getServletPath(), "");
-            cosFile.setUrl(String.join("/", url, "cos/tx", cosFile.getId(), "download"));
+//            cosFile.setUrl(String.join("/", url, "cos/tx", cosFile.getId(), "download"));
             this.cosFileRepository.save(cosFile);
 
             return cosFile;
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (CosServiceException e) {
             e.printStackTrace();
         } catch (CosClientException e) {
             e.printStackTrace();
@@ -219,6 +210,18 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
         CosFile cosFile = this.cosFileRepository.findById(fileId).get();
         // 调用 COS 接口之前必须保证本进程存在一个 COSClient 实例，如果没有则创建
         // 详细代码参见本页：简单操作 -> 创建 COSClient
+
+        return this.download(cosFile);
+    }
+
+    @Override
+    public CosFile createFile(CosFile file) {
+        return this.cosFileRepository.save(file);
+    }
+
+
+    @Override
+    public byte[] download(BaseCosFile cosFile) {
         COSClient cosClient = createCOSClient();
 
         // 存储桶的命名格式为 BucketName-APPID，此处填写的存储桶名称必须为此格式
@@ -233,8 +236,6 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
         try {
             COSObject cosObject = cosClient.getObject(getObjectRequest);
             cosObjectInput = cosObject.getObjectContent();
-        } catch (CosServiceException e) {
-            e.printStackTrace();
         } catch (CosClientException e) {
             e.printStackTrace();
         }
@@ -267,12 +268,6 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
         // 确认本进程不再使用 cosClient 实例之后，关闭即可
         cosClient.shutdown();
         return bytes;
-
-    }
-
-    @Override
-    public CosFile createFile(CosFile file) {
-        return this.cosFileRepository.save(file);
     }
 
 }
