@@ -1,6 +1,8 @@
 package cn.sparrowmini.ext.oss.txcos;
 
 import cn.sparrowmini.file.model.BaseCosFile;
+import cn.sparrowmini.file.model.CosFile;
+import cn.sparrowmini.file.repository.CosFileRepository;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;

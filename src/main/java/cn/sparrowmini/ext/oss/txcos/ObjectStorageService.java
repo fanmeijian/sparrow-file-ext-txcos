@@ -1,6 +1,7 @@
 package cn.sparrowmini.ext.oss.txcos;
 
 import cn.sparrowmini.file.model.BaseCosFile;
+import cn.sparrowmini.file.model.CosFile;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cn.sparrowmini</groupId>
 	<artifactId>sparrow-ext-file-txcos</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<packaging>jar</packaging>
 	<properties>
 		<java.version>11</java.version>
@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>cn.sparrowmini</groupId>
 			<artifactId>sparrow-org</artifactId>
-			<version>0.2.2</version>
+			<version>0.2.3</version>
 		</dependency>
 
 
