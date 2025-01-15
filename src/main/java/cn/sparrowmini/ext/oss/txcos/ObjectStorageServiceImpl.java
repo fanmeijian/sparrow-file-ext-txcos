@@ -3,6 +3,7 @@ package cn.sparrowmini.ext.oss.txcos;
 import cn.sparrowmini.file.model.BaseCosFile;
 import cn.sparrowmini.file.model.CosFile;
 import cn.sparrowmini.file.repository.CosFileRepository;
+import cn.sparrowmini.file.service.DownloadPermission;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
@@ -14,8 +15,10 @@ import com.qcloud.cos.region.Region;
 import com.qcloud.cos.utils.IOUtils;
 import com.tencent.cloud.CosStsClient;
 import com.tencent.cloud.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,20 +30,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.TreeMap;
 
+@Slf4j
 @Service
 public class ObjectStorageServiceImpl implements ObjectStorageService {
 
     @Autowired
     private CosConfig config;
 
-    @Autowired
-    private CosFileRepository cosFileRepository;
 
     @Autowired
     private HttpServletRequest httpServletRequest;
 
     @Autowired
     private HttpServletResponse response;
+
+    @Autowired
+    private CosFileRepository cosFileRepository;
+
 
     @Override
     public Response getUploadTmpKey(String fileName, String path) {
@@ -55,11 +61,14 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
         return this.getTmpkey(fileName, allowActions, path);
     }
 
+    @DownloadPermission
     @Override
     public Response getDownloadTmpKey(String fileName, String path) {
         String[] allowActions = new String[]{
                 // 下载
                 "name/cos:GetObject"};
+
+
         return this.getTmpkey(fileName, allowActions, path);
     }
 
@@ -101,12 +110,8 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
 
             Response response = CosStsClient.getCredential(config);
 
-            // System.out.println(response.credentials.tmpSecretId);
-            // System.out.println(response.credentials.tmpSecretKey);
-            // System.out.println(response.credentials.sessionToken);
             return response;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new IllegalArgumentException("no valid secret !");
         }
     }
@@ -152,17 +157,12 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
 
             cosFile.setHash(putObjectResult.getContentMd5());
             String url = httpServletRequest.getRequestURL().toString().replace(httpServletRequest.getServletPath(), "");
-//            cosFile.setUrl(String.join("/", url, "cos/tx", cosFile.getId(), "download"));
             this.cosFileRepository.save(cosFile);
 
             return cosFile;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (CosClientException e) {
-            e.printStackTrace();
+        } catch (IOException |CosClientException e) {
+            log.error(e.getMessage(), e);
         }
-
         // 确认本进程不再使用 cosClient 实例之后，关闭即可
         cosClient.shutdown();
         return null;
@@ -239,7 +239,7 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
             COSObject cosObject = cosClient.getObject(getObjectRequest);
             cosObjectInput = cosObject.getObjectContent();
         } catch (CosClientException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
         // 处理下载到的流
@@ -255,14 +255,13 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
 
             return bytes;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             // 用完流之后一定要调用 close()
             try {
                 cosObjectInput.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+               log.error(e.getMessage(), e);
             }
         }
 
